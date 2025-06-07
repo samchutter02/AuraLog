@@ -10,11 +10,10 @@ import type { NavigationProp } from '@react-navigation/native'
 
 const BUTTON_SIZE = 110
 const BUTTON_WIDTH = 370
-const BUTTON_RADIUS = 16 // match IL button b.r
+const BUTTON_RADIUS = 16
 
-const BORDER_GAP = 6 //space between button and border
+const BORDER_GAP = 6
 
-//creates rounded rectangle path
 function roundedRectPath(x: number, y: number, w: number, h: number, r: number) {
   return `
     M${x + r},${y}
@@ -37,38 +36,36 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const anim = useRef(new Animated.Value(0)).current
 
   const showToast = () => {
-  const OctoCount = 8;
-  const OctoPause = 150;
-  const innerSpacing = 80;
+    const SixCount = 6;
+    const SixPause = 200;
+    const innerSpacing = 100;
 
-  for (let t = 0; t < OctoCount; t++) {
-    const tripletStart = t * (OctoPause + innerSpacing * 2);
+    for (let t = 0; t < SixCount; t++) {
+      const tripletStart = t * (SixPause + innerSpacing * 2);
 
-    for (let i = 0; i < 3; i++) {
-      setTimeout(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-      }, tripletStart + i * innerSpacing);
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        }, tripletStart + i * innerSpacing);
+      }
     }
-  }
 
-  setShowingSuccess(true);
-  Animated.timing(anim, {
-    toValue: 1,
-    duration: 600,
-    easing: Easing.out(Easing.cubic),
-    useNativeDriver: false,
-  }).start(() => {
-    setTimeout(() => {
-      Animated.timing(anim, {
-        toValue: 0,
-        duration: 350,
-        useNativeDriver: false,
-      }).start(() => setShowingSuccess(false));
-    }, 2000);
-  });
-};
-
-
+    setShowingSuccess(true);
+    Animated.timing(anim, {
+      toValue: 1,
+      duration: 600,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    }).start(() => {
+      setTimeout(() => {
+        Animated.timing(anim, {
+          toValue: 0,
+          duration: 350,
+          useNativeDriver: false,
+        }).start(() => setShowingSuccess(false));
+      }, 2000);
+    });
+  };
 
   const gradientWidth = anim.interpolate({
     inputRange: [0, 1],
@@ -83,6 +80,11 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const animatedTextColor = anim.interpolate({
     inputRange: [0, 1],
     outputRange: ['#fff', '#1d1c21'],
+  })
+
+  const animatedTitleColor = anim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#C79BF6', '#43e97b'],
   })
 
   const borderWidth = BUTTON_WIDTH + BORDER_GAP * 2
@@ -115,9 +117,21 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
       }}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={{ color: '#fff', fontSize: 55, marginVertical: 26, marginTop: 60, textShadowColor: '#8E34EE',
-       textShadowOffset: { width: 0, height: 0 },
-       textShadowRadius: 10, }}>AuraLog</Text>
+      <Animated.Text
+        style={{
+          color: animatedTitleColor,
+          fontSize: 60,
+          marginVertical: 26,
+          marginTop: 60,
+          textShadowColor: '#8E34EE',
+          textShadowOffset: { width: 0, height: 0 },
+          textShadowRadius: 10,
+          fontWeight: 'bold',
+          textAlign: 'center',
+        }}
+      >
+        AuraLog
+      </Animated.Text>
       <View style={{ marginBottom: 32 }}>
         <Text style={{ color: '#ccc', fontSize: 18, textAlign: 'left', paddingHorizontal: 14 }}>
           Log a migraine instantly with a single tap–time, default meds, and weather conditions included. Add details when you're feeling better.
@@ -125,13 +139,14 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
       </View>
       <View style={{
         position: 'relative',
-        marginBottom: 40,
+        marginBottom: 22,
         width: BUTTON_WIDTH,
         height: BUTTON_SIZE,
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center'
       }}>
+        {/* Animated SVG Rounded Rectangle Border (floating outside the button) */}
         <View style={{
           position: 'absolute',
           left: -BORDER_GAP,
@@ -239,13 +254,13 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
           title="Set Default Meds"
           description="Save your go-to medicine cocktail and zip code."
           onPress={() => navigation && navigation.navigate ? navigation.navigate('Settings') : null}
-          containerStyle={{ borderRadius: 16, marginVertical: 10, backgroundColor: '#28272d' }}
+          containerStyle={{ borderRadius: 16, marginVertical: 7, backgroundColor: '#28272d' }}
         />
         <LandingOptionButtonContainer
           title="History"
           description="View and add details to past logs, see trends, and more."
           onPress={() => {}}
-          containerStyle={{ borderRadius: 16, marginVertical: 10, backgroundColor: '#28272d' }}
+          containerStyle={{ borderRadius: 16, marginVertical: 7, backgroundColor: '#28272d' }}
         />
         <LandingOptionButtonContainer
           title="Add More Details"
@@ -253,7 +268,7 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
           onPress={() => {}}
           containerStyle={{
             borderRadius: 16,
-            marginVertical: 10,
+            marginVertical: 7,
             backgroundColor: '#323c45',
             borderWidth: 1,
             borderColor: '#609ec7',
