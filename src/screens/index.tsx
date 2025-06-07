@@ -37,27 +37,38 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const anim = useRef(new Animated.Value(0)).current
 
   const showToast = () => {
-    for (let i = 0; i < 10; i++) {
+  const OctoCount = 8;
+  const OctoPause = 150;
+  const innerSpacing = 80;
+
+  for (let t = 0; t < OctoCount; t++) {
+    const tripletStart = t * (OctoPause + innerSpacing * 2);
+
+    for (let i = 0; i < 3; i++) {
       setTimeout(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-      }, i * 20)
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      }, tripletStart + i * innerSpacing);
     }
-    setShowingSuccess(true)
-    Animated.timing(anim, {
-      toValue: 1,
-      duration: 600,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: false,
-    }).start(() => {
-      setTimeout(() => {
-        Animated.timing(anim, {
-          toValue: 0,
-          duration: 350,
-          useNativeDriver: false,
-        }).start(() => setShowingSuccess(false))
-      }, 2000)
-    })
   }
+
+  setShowingSuccess(true);
+  Animated.timing(anim, {
+    toValue: 1,
+    duration: 600,
+    easing: Easing.out(Easing.cubic),
+    useNativeDriver: false,
+  }).start(() => {
+    setTimeout(() => {
+      Animated.timing(anim, {
+        toValue: 0,
+        duration: 350,
+        useNativeDriver: false,
+      }).start(() => setShowingSuccess(false));
+    }, 2000);
+  });
+};
+
+
 
   const gradientWidth = anim.interpolate({
     inputRange: [0, 1],
@@ -104,7 +115,9 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
       }}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={{ color: '#fff', fontSize: 55, marginVertical: 26, marginTop: 60 }}>AuraLog</Text>
+      <Text style={{ color: '#fff', fontSize: 55, marginVertical: 26, marginTop: 60, textShadowColor: '#8E34EE',
+       textShadowOffset: { width: 0, height: 0 },
+       textShadowRadius: 10, }}>AuraLog</Text>
       <View style={{ marginBottom: 32 }}>
         <Text style={{ color: '#ccc', fontSize: 18, textAlign: 'left', paddingHorizontal: 14 }}>
           Log a migraine instantly with a single tap–time, default meds, and weather conditions included. Add details when you're feeling better.
@@ -196,7 +209,7 @@ const LandingPage = ({ navigation }: { navigation: NavigationProp<any> }) => {
               textAlign: 'center',
             }}
           >
-            {showingSuccess ? 'Log Successfully Saved' : 'Instant Log'}
+            {showingSuccess ? 'Log Successfully Saved!' : 'Instant Log'}
           </Animated.Text>
           <View style={{
             position: 'absolute',
